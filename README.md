@@ -1,7 +1,7 @@
 # LSTM Model for the PRESENT Cipher
 
 Deep-learning cryptanalysis of the **PRESENT** lightweight block cipher. The project
-trains **Bidirectional LSTM** networks to recover plaintext directly from ciphertext,
+trains ** LSTM** networks to recover plaintext directly from ciphertext,
 and measures how well the attack works as the number of encryption rounds increases
 (round 1 → round 31). It is a reproduction/experimentation harness around a
 known-plaintext, deep-learning attack methodology, evaluated across three data
@@ -54,7 +54,7 @@ N grows toward the full 31 rounds?**
 2. **Preprocessing** — each 64-bit block is split into 8 bytes, normalized to `[0, 1]`,
    and reshaped to the LSTM input shape `(8 timesteps, 1 feature)`
    ([`preprocessing.py`](preprocessing.py)).
-3. **Round-by-round training** — for each round `r` from 1 to 31, a BiLSTM is trained to
+3. **Round-by-round training** — for each round `r` from 1 to 31, a LSTM is trained to
    map ciphertext → plaintext. Ciphertexts are **chained**: the output of round `r`
    feeds the encryption for round `r+1`, so the attack is evaluated at every reduced-round
    depth.
@@ -84,7 +84,7 @@ LSTM-Model-Present-Cipher/
 ├── cipher.py             # PRESENT-80 reference implementation (S-box, P-box, key schedule)
 ├── generate.py           # Generates plaintext/ciphertext CSV datasets from the cipher & PDFs
 ├── preprocessing.py      # Hex → byte-matrix → normalized LSTM tensors; train/test split
-├── model.py              # Baseline BiLSTM architecture (build_model)
+├── model.py              # Baseline LSTM architecture (build_model)
 │
 ├── train_ctt.py          # CTT  training pipeline (dataset1)
 ├── train_nctt.py         # NCTT training pipeline (dataset2–4)
@@ -170,14 +170,14 @@ bits each).
 
 ## Model Architecture
 
-The baseline model ([`model.py`](model.py)) is a stacked **Bidirectional LSTM**
+The baseline model ([`model.py`](model.py)) is a stacked **LSTM**
 regressor:
 
 ```
 Input (8, 1)
- → Bidirectional LSTM(64, tanh, return_sequences)
+ → LSTM(64, tanh, return_sequences)
  → Dropout(0.5)
- → Bidirectional LSTM(64, tanh)
+ → LSTM(64, tanh)
  → Dropout(0.5)
  → Dense(8, linear)          # predicts the 8 plaintext bytes
 ```
