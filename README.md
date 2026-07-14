@@ -112,7 +112,7 @@ pip install tensorflow numpy scikit-learn optuna
 
 | Package        | Used for |
 |----------------|----------|
-| `tensorflow`   | Keras BiLSTM models |
+| `tensorflow`   | Keras LSTM models |
 | `numpy`        | Byte/tensor manipulation |
 | `scikit-learn` | Train/test splitting |
 | `optuna`       | Hyperparameter search (fallback when paper hyperparameters aren't defined for a round) |
